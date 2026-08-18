@@ -1,0 +1,36 @@
+services:
+  camply-web:
+    image: ghcr.io/gclenaghan/camply-web:latest
+    container_name: camply-web
+    restart: unless-stopped
+    ports:
+      - "8080:8000"
+    volumes:
+      - camply-data:/app/data
+    environment:
+      # --- Email Notifications (optional — can also be configured in web UI) ---
+      # EMAIL_TO: "your-email@example.com"
+      # EMAIL_USERNAME: "smtp-user@example.com"
+      # EMAIL_PASSWORD: "your-smtp-password"
+      # EMAIL_SMTP_SERVER: "smtp.gmail.com"
+      # EMAIL_SMTP_PORT: "465"
+
+      # --- Pushover (optional) ---
+      # PUSHOVER_PUSH_TOKEN: ""
+      # PUSHOVER_PUSH_USER: ""
+
+      # --- Telegram (optional) ---
+      # TELEGRAM_BOT_TOKEN: ""
+      # TELEGRAM_CHAT_ID: ""
+
+      # --- Slack (optional) ---
+      # SLACK_WEBHOOK: ""
+
+      # --- ntfy (optional) ---
+      # NTFY_TOPIC: ""
+
+      # --- Webhook (optional) ---
+      # WEBHOOK_URL: ""
+
+volumes:
+  camply-data:
