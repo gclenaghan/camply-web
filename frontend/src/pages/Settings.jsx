@@ -45,11 +45,13 @@ export default function Settings() {
     const configurable = notifMethods.filter(m => m.env_vars && m.env_vars.length > 0)
 
     const ENV_VAR_LABELS = {
-        EMAIL_TO: 'Recipient Email',
+        EMAIL_TO_ADDRESS: 'Recipient Email',
         EMAIL_USERNAME: 'SMTP Username',
         EMAIL_PASSWORD: 'SMTP Password',
         EMAIL_SMTP_SERVER: 'SMTP Server',
         EMAIL_SMTP_PORT: 'SMTP Port',
+        EMAIL_FROM_ADDRESS: 'From Address (Optional)',
+        EMAIL_SUBJECT_LINE: 'Subject Line (Optional)',
         PUSHOVER_PUSH_TOKEN: 'Pushover App Token',
         PUSHOVER_PUSH_USER: 'Pushover User Key',
         PUSHBULLET_API_TOKEN: 'Pushbullet API Token',

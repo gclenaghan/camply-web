@@ -19,8 +19,9 @@ logger = logging.getLogger(__name__)
 def get_notification_env(db: Session) -> dict[str, str]:
     """Load notification-related env vars from settings table."""
     env_keys = [
-        "EMAIL_TO", "EMAIL_USERNAME", "EMAIL_PASSWORD",
-        "EMAIL_SMTP_SERVER", "EMAIL_SMTP_PORT",
+        "EMAIL_TO_ADDRESS", "EMAIL_TO", "EMAIL_USERNAME", "EMAIL_PASSWORD",
+        "EMAIL_SMTP_SERVER", "EMAIL_SMTP_PORT", 
+        "EMAIL_FROM_ADDRESS", "EMAIL_SUBJECT_LINE",
         "PUSHOVER_PUSH_TOKEN", "PUSHOVER_PUSH_USER",
         "PUSHBULLET_API_TOKEN",
         "TELEGRAM_BOT_TOKEN", "TELEGRAM_CHAT_ID",
@@ -35,6 +36,8 @@ def get_notification_env(db: Session) -> dict[str, str]:
     settings = db.query(Setting).filter(Setting.key.in_(env_keys)).all()
     for s in settings:
         if s.value:
+            if s.key == "EMAIL_TO" and "EMAIL_TO_ADDRESS" not in env:
+                env["EMAIL_TO_ADDRESS"] = s.value
             env[s.key] = s.value
     return env
 

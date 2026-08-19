@@ -30,11 +30,13 @@ services:
     volumes:
       - camply-data:/app/data
     environment:
-      EMAIL_TO: "you@example.com"
+      EMAIL_TO_ADDRESS: "you@example.com"
       EMAIL_USERNAME: "smtp-user@example.com"
       EMAIL_PASSWORD: "your-password"
       EMAIL_SMTP_SERVER: "smtp.gmail.com"
       EMAIL_SMTP_PORT: "465"
+      EMAIL_FROM_ADDRESS: "camply@juftin.com"
+      EMAIL_SUBJECT_LINE: "Camply Notification"
 
 volumes:
   camply-data:

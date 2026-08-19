@@ -131,7 +131,7 @@ PROVIDERS = [
 
 NOTIFICATION_METHODS = [
     {"id": "silent", "name": "Silent (log only)", "env_vars": []},
-    {"id": "email", "name": "Email", "env_vars": ["EMAIL_TO", "EMAIL_USERNAME", "EMAIL_PASSWORD", "EMAIL_SMTP_SERVER", "EMAIL_SMTP_PORT"]},
+    {"id": "email", "name": "Email", "env_vars": ["EMAIL_TO_ADDRESS", "EMAIL_USERNAME", "EMAIL_PASSWORD", "EMAIL_SMTP_SERVER", "EMAIL_SMTP_PORT", "EMAIL_FROM_ADDRESS", "EMAIL_SUBJECT_LINE"]},
     {"id": "pushover", "name": "Pushover", "env_vars": ["PUSHOVER_PUSH_TOKEN", "PUSHOVER_PUSH_USER"]},
     {"id": "pushbullet", "name": "Pushbullet", "env_vars": ["PUSHBULLET_API_TOKEN"]},
     {"id": "telegram", "name": "Telegram", "env_vars": ["TELEGRAM_BOT_TOKEN", "TELEGRAM_CHAT_ID"]},
