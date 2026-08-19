@@ -13,8 +13,8 @@ class SearchCreate(BaseModel):
     recreation_area_ids: list[int | str] = Field(default_factory=list)
     campground_ids: list[int | str] = Field(default_factory=list)
     campsite_ids: list[int | str] = Field(default_factory=list)
-    start_date: str = Field(..., pattern=r"^\d{4}-\d{2}-\d{2}$")
-    end_date: str = Field(..., pattern=r"^\d{4}-\d{2}-\d{2}$")
+    start_date: str = Field(..., regex=r"^\d{4}-\d{2}-\d{2}$")
+    end_date: str = Field(..., regex=r"^\d{4}-\d{2}-\d{2}$")
     days: list[str] = Field(default_factory=list)
     weekends: bool = False
     nights: int = Field(default=1, ge=1)
@@ -57,7 +57,7 @@ class AlertHistoryResponse(BaseModel):
     found_at: datetime
 
     class Config:
-        from_attributes = True
+        orm_mode = True
 
 
 class SearchResponse(BaseModel):
@@ -86,7 +86,7 @@ class SearchResponse(BaseModel):
     alert_count: int = 0
 
     class Config:
-        from_attributes = True
+        orm_mode = True
 
 
 class SearchDetailResponse(SearchResponse):

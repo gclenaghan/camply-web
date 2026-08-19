@@ -10,7 +10,7 @@ dependencies = [
     "apscheduler>=3.10,<4",
     "pyyaml>=6.0",
     "camply>=0.30",
-    "pydantic>=2.0",
+    "pydantic~=1.10.22",
     "aiosqlite>=0.20",
 ]
 
@@ -25,5 +25,5 @@ dev = [
 include = ["backend*"]
 
 [build-system]
-requires = ["setuptools>=68"]
+requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"

@@ -1,7 +1,0 @@
-<<<<<<< SEARCH
-    "camply>=0.30",
-    "pydantic>=2.0",
-=======
-    "camply>=0.30",
-    "pydantic~=1.10.22",
->>>>>>> REPLACE

@@ -1,5 +1,0 @@
-<<<<<<< SEARCH
-    update_data = data.model_dump(exclude_unset=True)
-=======
-    update_data = data.dict(exclude_unset=True)
->>>>>>> REPLACE

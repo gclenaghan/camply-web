@@ -21,7 +21,7 @@ WORKDIR /app
 
 # Install Python deps
 COPY pyproject.toml .
-RUN pip install --no-cache-dir .
+RUN pip install setuptools wheel && pip install --no-cache-dir .
 
 # Copy backend code
 COPY backend/ backend/

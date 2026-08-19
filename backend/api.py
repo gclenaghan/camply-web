@@ -101,7 +101,7 @@ def get_search(search_id: int, db: Session = Depends(get_db)):
 
     resp = _search_to_response(search)
     resp["alerts"] = [
-        AlertHistoryResponse.model_validate(a)
+        AlertHistoryResponse.from_orm(a)
         for a in sorted(search.alerts, key=lambda x: x.found_at, reverse=True)
     ]
     return resp
@@ -114,7 +114,7 @@ def update_search(search_id: int, data: SearchUpdate, db: Session = Depends(get_
     if not search:
         raise HTTPException(status_code=404, detail="Search not found")
 
-    update_data = data.model_dump(exclude_unset=True)
+    update_data = data.dict(exclude_unset=True)
     json_fields = [
         "recreation_area_ids", "campground_ids", "campsite_ids",
         "days", "equipment",
