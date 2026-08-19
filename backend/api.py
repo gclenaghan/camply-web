@@ -101,10 +101,7 @@ def get_search(search_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Search not found")
 
     resp = _search_to_response(search)
-    resp["alerts"] = [
-        AlertHistoryResponse.model_validate(a)
-        for a in sorted(search.alerts, key=lambda x: x.found_at, reverse=True)
-    ]
+    resp["alerts"] = sorted(search.alerts, key=lambda x: x.found_at, reverse=True)
     return resp
 
 

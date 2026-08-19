@@ -147,9 +147,10 @@ def run_search(search_id: int, db: Session) -> None:
 
                 if new_alerts > 0:
                     logger.info(
-                        "Search %d (%s): Found %d new campsites",
+                        "Search %d (%s): Found %d new campsites. Disabling search.",
                         search.id, search.name, new_alerts,
                     )
+                    search.enabled = False
 
             except (json.JSONDecodeError, KeyError) as e:
                 logger.error("Error parsing results for search %d: %s", search.id, e)

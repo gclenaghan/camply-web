@@ -25,7 +25,10 @@ function timeAgo(dateStr) {
     return `${days}d ago`
 }
 
-function StatusBadge({ status, alertCount }) {
+function StatusBadge({ status, alertCount, enabled }) {
+    if (enabled === false) {
+        return <span className="status-badge" style={{ background: 'var(--bg-card-hover)', color: 'var(--text-muted)' }}>⏸ Inactive</span>
+    }
     if (alertCount > 0 && status !== 'running') {
         return <span className="status-badge status-found">✓ {alertCount} found</span>
     }
@@ -40,15 +43,16 @@ function StatusBadge({ status, alertCount }) {
 }
 
 function SearchCard({ search, onDelete, onToggle, onRun }) {
+    const isInactive = !search.enabled;
     return (
-        <div className="card search-card" onClick={() => { }}>
+        <div className="card search-card" style={{ opacity: isInactive ? 0.75 : 1 }} onClick={() => { }}>
             <Link to={`/searches/${search.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                 <div className="search-card-header">
                     <div>
                         <div className="search-card-name">{search.name}</div>
                         <div className="search-card-provider">{search.provider}</div>
                     </div>
-                    <StatusBadge status={search.status} alertCount={search.alert_count} />
+                    <StatusBadge status={search.status} alertCount={search.alert_count} enabled={search.enabled} />
                 </div>
 
                 <div className="search-card-meta">
@@ -160,6 +164,9 @@ export default function Dashboard() {
         )
     }
 
+    const activeSearches = searches.filter(s => s.enabled)
+    const inactiveSearches = searches.filter(s => !s.enabled)
+
     return (
         <div>
             <div className="page-header">
@@ -188,17 +195,41 @@ export default function Dashboard() {
                     </button>
                 </div>
             ) : (
-                <div className="search-grid">
-                    {searches.map(search => (
-                        <SearchCard
-                            key={search.id}
-                            search={search}
-                            onDelete={handleDelete}
-                            onToggle={handleToggle}
-                            onRun={handleRun}
-                        />
-                    ))}
-                </div>
+                <>
+                    {activeSearches.length > 0 && (
+                        <div style={{ marginBottom: '2rem' }}>
+                            <h2 style={{ fontSize: '1.125rem', fontWeight: 600, marginBottom: '1rem', color: 'var(--text-secondary)' }}>Active Searches</h2>
+                            <div className="search-grid">
+                                {activeSearches.map(search => (
+                                    <SearchCard
+                                        key={search.id}
+                                        search={search}
+                                        onDelete={handleDelete}
+                                        onToggle={handleToggle}
+                                        onRun={handleRun}
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {inactiveSearches.length > 0 && (
+                        <div>
+                            <h2 style={{ fontSize: '1.125rem', fontWeight: 600, marginBottom: '1rem', color: 'var(--text-muted)' }}>Inactive / Completed Searches</h2>
+                            <div className="search-grid">
+                                {inactiveSearches.map(search => (
+                                    <SearchCard
+                                        key={search.id}
+                                        search={search}
+                                        onDelete={handleDelete}
+                                        onToggle={handleToggle}
+                                        onRun={handleRun}
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </>
             )}
         </div>
     )
