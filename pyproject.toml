@@ -4,14 +4,14 @@ version = "0.1.0"
 description = "Web UI for camply campsite finder"
 requires-python = ">=3.11"
 dependencies = [
-    "fastapi>=0.115",
-    "uvicorn[standard]>=0.30",
-    "sqlalchemy>=2.0",
-    "apscheduler>=3.10,<4",
-    "pyyaml>=6.0",
-    "camply>=0.30",
-    "pydantic>=2.0",
-    "aiosqlite>=0.20",
+    "fastapi",
+    "uvicorn[standard]",
+    "sqlalchemy",
+    "apscheduler",
+    "pyyaml",
+    "camply",
+    "pydantic",
+    "aiosqlite",
 ]
 
 [project.optional-dependencies]

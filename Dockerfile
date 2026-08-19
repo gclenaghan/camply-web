@@ -1,5 +1,5 @@
 # ----- Stage 1: Build Frontend -----
-FROM node:20-alpine AS frontend-build
+FROM node:lts-alpine AS frontend-build
 WORKDIR /app/frontend
 COPY frontend/package*.json ./
 RUN npm ci
@@ -19,12 +19,12 @@ RUN useradd --create-home --shell /bin/bash appuser
 
 WORKDIR /app
 
-# Install Python deps
+# Copy backend code first so pip can build the module
+COPY backend/ backend/
+
+# Install Python deps and the module
 COPY pyproject.toml .
 RUN pip install --no-cache-dir .
-
-# Copy backend code
-COPY backend/ backend/
 
 # Copy built frontend
 COPY --from=frontend-build /app/frontend/dist frontend/dist
