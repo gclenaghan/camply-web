@@ -4,6 +4,7 @@ import { api } from '../api.js'
 
 function formatDateTime(dateStr) {
     if (!dateStr) return '—'
+    if (!dateStr.endsWith('Z') && !dateStr.includes('+')) dateStr += 'Z'
     return new Date(dateStr).toLocaleString('en-US', {
         month: 'short', day: 'numeric', year: 'numeric',
         hour: 'numeric', minute: '2-digit',
@@ -12,6 +13,7 @@ function formatDateTime(dateStr) {
 
 function formatDate(dateStr) {
     if (!dateStr) return '—'
+    if (!dateStr.endsWith('Z') && !dateStr.includes('+')) dateStr += 'Z'
     return new Date(dateStr).toLocaleDateString('en-US', {
         month: 'short', day: 'numeric', year: 'numeric',
     })
@@ -23,11 +25,18 @@ export default function SearchDetail() {
     const [search, setSearch] = useState(null)
     const [loading, setLoading] = useState(true)
     const [running, setRunning] = useState(false)
+    const [logs, setLogs] = useState('')
 
     const loadSearch = async () => {
         try {
             const data = await api.getSearch(id)
             setSearch(data)
+            try {
+                const logsData = await api.getSearchLogs(id)
+                setLogs(logsData.logs)
+            } catch (err) {
+                // Ignore log fetching errors (e.g. 404 if no logs yet)
+            }
         } catch (err) {
             console.error('Failed to load search:', err)
         } finally {
@@ -269,6 +278,28 @@ export default function SearchDetail() {
                             ))}
                         </tbody>
                     </table>
+                </div>
+            )}
+
+            {/* Logs */}
+            {logs && (
+                <div style={{ marginTop: '2rem' }}>
+                    <h2 style={{ fontSize: '1.125rem', fontWeight: 600, marginBottom: '1rem' }}>
+                        Process Logs
+                    </h2>
+                    <pre style={{
+                        background: '#1e1e1e',
+                        color: '#d4d4d4',
+                        padding: '1rem',
+                        borderRadius: '6px',
+                        overflowX: 'auto',
+                        maxHeight: '400px',
+                        fontSize: '0.8125rem',
+                        fontFamily: 'monospace',
+                        whiteSpace: 'pre-wrap'
+                    }}>
+                        {logs}
+                    </pre>
                 </div>
             )}
         </div>

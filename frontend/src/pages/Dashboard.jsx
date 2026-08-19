@@ -4,6 +4,7 @@ import { api } from '../api.js'
 
 function formatDate(dateStr) {
     if (!dateStr) return '—'
+    if (!dateStr.endsWith('Z') && !dateStr.includes('+')) dateStr += 'Z'
     return new Date(dateStr).toLocaleDateString('en-US', {
         month: 'short', day: 'numeric', year: 'numeric',
     })
@@ -11,6 +12,7 @@ function formatDate(dateStr) {
 
 function timeAgo(dateStr) {
     if (!dateStr) return 'Never'
+    if (!dateStr.endsWith('Z') && !dateStr.includes('+')) dateStr += 'Z'
     const now = new Date()
     const d = new Date(dateStr)
     const diffMs = now - d

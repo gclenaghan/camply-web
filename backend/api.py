@@ -3,6 +3,7 @@
 import json
 import logging
 from threading import Thread
+from pathlib import Path
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
@@ -191,6 +192,25 @@ def get_history(search_id: int, db: Session = Depends(get_db)):
         .all()
     )
     return alerts
+
+
+@router.get("/searches/{search_id}/logs")
+def get_logs(search_id: int, db: Session = Depends(get_db)):
+    """Get process logs for a search."""
+    search = db.query(Search).filter(Search.id == search_id).first()
+    if not search:
+        raise HTTPException(status_code=404, detail="Search not found")
+
+    log_path = Path("data") / f"search_{search.id}_run.log"
+    if not log_path.exists():
+        return {"logs": "No logs available for this search."}
+
+    try:
+        with open(log_path, "r") as f:
+            lines = f.readlines()
+            return {"logs": "".join(lines[-500:])}
+    except Exception as e:
+        return {"logs": f"Error reading logs: {e}"}
 
 
 # --- Settings ---

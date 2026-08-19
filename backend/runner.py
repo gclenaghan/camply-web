@@ -83,6 +83,9 @@ def run_search(search_id: int, db: Session) -> None:
             yaml.dump(yaml_config, f)
             yaml_path = f.name
 
+        is_error = False
+        error_message = None
+
         try:
             # Build environment with notification settings
             env = os.environ.copy()
@@ -97,9 +100,18 @@ def run_search(search_id: int, db: Session) -> None:
                 env=env,
             )
 
-            logger.info("camply stdout: %s", result.stdout[-500:] if result.stdout else "")
+            log_path = data_dir / f"search_{search.id}_run.log"
+            with open(log_path, "w") as logf:
+                if result.stdout:
+                    logf.write(result.stdout)
+                if result.stderr:
+                    logf.write("\n--- STDERR ---\n")
+                    logf.write(result.stderr)
+
             if result.returncode != 0:
                 logger.warning("camply stderr: %s", result.stderr[-500:] if result.stderr else "")
+                is_error = True
+                error_message = result.stderr[-500:] if result.stderr else "Process exited with non-zero status"
 
         finally:
             # Clean up temp YAML
@@ -142,7 +154,12 @@ def run_search(search_id: int, db: Session) -> None:
             except (json.JSONDecodeError, KeyError) as e:
                 logger.error("Error parsing results for search %d: %s", search.id, e)
 
-        search.status = "idle"
+        if is_error:
+            search.status = "error"
+            search.last_error = error_message
+        else:
+            search.status = "idle"
+            search.last_error = None
         search.last_run_at = datetime.utcnow()
         db.commit()
 

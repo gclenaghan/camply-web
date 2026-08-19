@@ -32,6 +32,7 @@ export const api = {
     deleteSearch: (id) => request(`/searches/${id}`, { method: 'DELETE' }),
     runSearch: (id) => request(`/searches/${id}/run`, { method: 'POST' }),
     getHistory: (id) => request(`/searches/${id}/history`),
+    getSearchLogs: (id) => request(`/searches/${id}/logs`),
 
     // Settings
     getSettings: () => request('/settings'),
